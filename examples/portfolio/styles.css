@@ -1,0 +1,94 @@
+/* This is a CSS comment.
+  This file makes our plain HTML look good.
+*/
+
+/* Selects the <body> tag */
+body {
+  /* Use a modern, clean font */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  
+  /* Set our colors */
+  background-color: #1e1e1e; /* Dark background (VS Code dark) */
+  color: #d4d4d4;            /* Light gray text */
+  
+  /* Add some spacing */
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Selects the <main> tag */
+main {
+  /* Keep it from getting too wide on big screens */
+  max-width: 800px;
+  
+  /* Center the content */
+  margin: 40px auto; /* 40px on top/bottom, auto on left/right */
+  
+  /* Add padding inside the 'box' */
+  padding: 20px;
+  
+  /* A subtle border */
+  border: 1px solid #333;
+  border-radius: 8px; /* Rounded corners! */
+}
+
+/* Selects all <h1>, <h2>, and <h3> tags */
+h1, h2, h3 {
+  /* A different font for headings */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  
+  /* Add a bit of color */
+  color: #4ec9b0; /* A nice teal */
+  border-bottom: 2px solid #4ec9b0;
+  padding-bottom: 5px;
+}
+
+/* Selects only the <h1> tag */
+h1 {
+  font-size: 2.5rem; /* rem is a modern size unit */
+}
+
+/* Selects only the <h2> tag */
+h2 {
+  font-size: 2rem;
+  color: #c586c0; /* A nice purple */
+  border-bottom-color: #c586c0;
+}
+
+/* Selects only the <h3> tag */
+h3 {
+  font-size: 1.5rem;
+  color: #9cdcfe; /* A nice blue */
+  border-bottom-color: #9cdcfe;
+}
+
+/* Selects all <a> (link) tags */
+a {
+  color: #9cdcfe; /* Blue, to show it's a link */
+  text-decoration: none; /* Get rid of the ugly underline */
+}
+
+/* Selects a link *when you hover over it* */
+a:hover {
+  color: #fff; /* Brighten on hover */
+  text-decoration: underline; /* Add underline only on hover */
+}
+
+/* Selects all <ul> and <ol> (list) tags */
+ul, ol {
+  padding-left: 40px; /* Give the bullets/numbers some space */
+}
+
+/* Selects all <li> (list item) tags */
+li {
+  margin-bottom: 10px; /* Space out the list items */
+}
+
+/* Selects all <img> (image) tags */
+img {
+  max-width: 100%; /* Make sure images don't overflow their container */
+  height: auto;
+  border-radius: 8px; /* Rounded corners for images, too */
+  margin-top: 20px;
+}
