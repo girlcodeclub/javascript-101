@@ -3,6 +3,8 @@
 # GitHub SSH & GPG Key Setup Script
 # This script guides a user through generating and configuring
 # both key types for use with GitHub.
+#
+# * This is the FIXED version with the GPG_KEY_ID typo corrected.
 
 # --- Define Colors ---
 GREEN="\033[0;32m"
@@ -30,7 +32,6 @@ echo -e "\n${GREEN}Great. Using Email: $GIT_EMAIL and Name: $GIT_NAME${NC}\n"
 # --- 2. SSH Key Generation (Automated) ---
 echo -e "${BLUE}--- Part 1: SSH Key (Authentication) ---${NC}"
 echo "Generating a new ED25519 SSH key..."
-# -f specifies the file, -N "" provides an empty passphrase
 ssh-keygen -t ed25519 -C "$GIT_EMAIL" -f ~/.ssh/id_ed25519 -N "" > /dev/null
 
 echo "Starting ssh-agent and adding your new key..."
@@ -61,19 +62,12 @@ ssh -T git@github.com
 echo -e "\n${BLUE}--- Part 2: GPG Key (Verification) ---${NC}"
 echo "Checking for GPG tools..."
 
-# Check for gpg-agent and install if missing (Debian/Ubuntu)
 if ! command -v gpg-agent &> /dev/null; then
-    echo -e "${YELLOW}gpg-agent not found. Attempting to install 'gnupg-agent'...${NC}"
-    if command -v apt &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y gnupg-agent
-    else
-        echo -e "${YELLOW}Could not find 'apt'. Please install 'gnupg-agent' (or equivalent) manually and re-run.${NC}"
-        exit 1
-    fi
+    echo -e "${YELLOW}gpg-agent not found. This should have been installed by '1_setup_student_vm.sh'. Exiting.${NC}"
+    exit 1
 fi
 
 echo "Ensuring gpg-agent is running..."
-# Stop any old agents and start a new one to fix common VM issues
 gpg-connect-agent killagent /bye > /dev/null 2>&1
 gpg-agent --daemon > /dev/null
 
@@ -92,7 +86,6 @@ echo "9. Passphrase: ${GREEN}Create and enter a new passphrase.${NC} You will us
 echo -e "${YELLOW}Press [Enter] to begin...${NC}"
 read -r
 
-# Run the interactive generation command
 gpg --full-generate-key
 
 echo -e "\n${GREEN}GPG Key generated!${NC}"
@@ -102,8 +95,6 @@ echo -e "\n${GREEN}GPG Key generated!${NC}"
 echo -e "\n${BLUE}--- Part 3: Configure Git ---${NC}"
 echo "Finding your new GPG Key ID..."
 
-# Automatically find the new GPG Key ID
-# This parses the output of gpg --list-secret-keys
 GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format=long "$GIT_EMAIL" | grep sec | awk -F'/' '{print $2}' | awk '{print $1}')
 
 if [ -z "$GPG_KEY_ID" ]; then
@@ -115,7 +106,11 @@ else
     echo "Configuring Git to use your key and sign all commits..."
     git config --global user.name "$GIT_NAME"
     git config --global user.email "$GIT_EMAIL"
-    git config --global user.signingkey "$GGPG_KEY_ID"
+    
+    # --- THIS IS THE FIXED LINE ---
+    git config --global user.signingkey "$GPG_KEY_ID"
+    # --- THE TYPO 'GGPG_KEY_ID' IS GONE ---
+    
     git config --global commit.gpgsign true
 fi
 
@@ -134,4 +129,3 @@ read -r
 # --- 5. Finish ---
 echo -e "\n${GREEN}🎉 All Done! 🎉${NC}"
 echo "Your system is fully configured to push to GitHub with SSH and create verified commits with GPG."
-echo "When you make a commit, you will be prompted for the GPG passphrase you created."
